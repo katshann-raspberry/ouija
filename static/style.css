@@ -23,7 +23,7 @@ body {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 1fr;  /* equal columns */
+  grid-template-columns: 1fr 4fr;
   gap: 2rem;
 }
 

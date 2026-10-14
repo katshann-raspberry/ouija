@@ -21,14 +21,11 @@ body {
   margin: 0;
 }
 
-.left {
-  float: left;
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* equal columns */
+  gap: 2rem;
 }
-
-.right {
-  float: right;
-}
-
 
 main {
   width: min(920px, calc(100% - 32px));

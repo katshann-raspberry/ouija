@@ -152,6 +152,23 @@ pre {
   font-size: 0.9rem;
 }
 
+summary {
+  list-style: none;            /* hide default triangle */
+}
+summary::-webkit-details-marker {
+  display: none;               /* Safari */
+}
+summary::before {
+  content: "▸ ";
+}
+details[open] summary::before {
+  content: "▾ ";
+}
+
+details{
+  margin-top: 10px;
+}
+
 @media (max-width: 700px) {
   main {
     width: calc(100% - 20px);

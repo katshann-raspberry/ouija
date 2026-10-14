@@ -19,8 +19,17 @@
 
 body {
   margin: 0;
-  background: url("images/ouija-bg-small.png") left bottom no-repeat fixed;
 }
+
+.left {
+  background: url("images/ouija-bg-small.png") left bottom no-repeat fixed;
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
 
 main {
   width: min(920px, calc(100% - 32px));

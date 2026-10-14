@@ -1,0 +1,1 @@
+"""OuijaCNC application package."""

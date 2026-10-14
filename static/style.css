@@ -22,7 +22,6 @@ body {
 }
 
 .left {
-  background: url("images/ouija-bg-small.png") left bottom no-repeat fixed;
   float: left;
 }
 

@@ -10,7 +10,7 @@
   font-weight: 400;
   font-style: normal;
   background: #583b3d;
-  color: #f0d2d0;
+  color: #fff2f0;
 }
 
 * {
@@ -19,6 +19,7 @@
 
 body {
   margin: 0;
+  background: url("images/ouija-bg-tight.png") left bottom no-repeat fixed;
 }
 
 main {
@@ -33,6 +34,10 @@ main {
   border: 5px solid #85713f;
   border-radius: 8px;
   padding: 20px;
+}
+
+form {
+  color: #2f2626;
 }
 
 header {

@@ -1,0 +1,32 @@
+{
+  "serial": {
+    "port": "/dev/ttyUSB0",
+    "baudrate": 115200,
+    "timeout_seconds": 1.0,
+    "write_timeout_seconds": 1.0
+  },
+  "startup": {
+    "home_on_connect": true,
+    "unlock_before_home": false,
+    "move_to_start_after_home": true
+  },
+  "gcode": {
+    "setup": [
+      "G21",
+      "G90",
+      "G94"
+    ],
+    "move_template": "G0 X{x:.3f} Y{y:.3f}",
+    "char_dwell_seconds": 0.0,
+    "word_pause_seconds": 0.0
+  },
+  "safety": {
+    "require_known_characters": true,
+    "bounds": {
+      "x_min": 0.0,
+      "x_max": 300.0,
+      "y_min": 0.0,
+      "y_max": 300.0
+    }
+  }
+}

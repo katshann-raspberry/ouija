@@ -1,12 +1,131 @@
-# ouija
-Front end for transmitting G Code to the ouija board
+# OuijaCNC
 
-Per Claude:
+A small Flask app for driving a FluidNC-controlled ESP32 from a Raspberry Pi.
 
-Setup notes:
+The browser submits text. The backend translates that text into configured XY
+coordinates and streams G-code to FluidNC over `/dev/ttyUSB0`.
 
-* CNCjs must be running first on the Pi, listening on port 8000 by default. If it's the same Pi you'll open this in a browser on that Pi (or another machine on the LAN, pointing host at the Pi's IP).
-* Auth token: CNCjs requires a token unless you've disabled auth in its config. Generate one from the CLI: cncjs --access-token-lifetime 30d (or use whatever token your existing CNCjs setup already issues) and paste it into the Token field.
-* Serial port / baud: pick the /dev/serial/by-id/... entry once "Refresh Ports" lists it — that's the stable one for FluidNC over USB. 115200 is FluidNC's default.
-* Jog buttons use $J= jog mode (Grbl-compatible, works on FluidNC) rather than plain G0, so moves are interruptible and don't queue up.
-* File load reads the whole G-code file into memory and hands it to CNCjs's own gcode:load / gcode:start sender, which does the buffer-aware streaming — so you get the character-counting protocol for free rather than reimplementing it in this HTML.
+## Local Development
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+flask --app ouijacnc.web run --host 0.0.0.0 --port 8080
+```
+
+The app uses the Raspberry Pi's stable CP2102 USB serial device path at `115200`.
+
+For development without the controller attached:
+
+```bash
+OUIJACNC_DRY_RUN=1 flask --app ouijacnc.web run --host 0.0.0.0 --port 8080
+```
+
+## Configuration
+
+Edit:
+
+- `config/settings.json` for serial settings, startup behavior, and G-code templates.
+- `locations.json` for character coordinates and named positions.
+
+The mapping follows the original `locations.json` format: `letters` contains
+character keys and `buttons` contains named positions such as `Goodbye`, `Yes`,
+and `No`. Each entry has `identifier`, `x`, and `y` fields; coordinates can be
+numeric strings or numbers. Entries with both coordinates empty are unmeasured
+and unavailable for submission. Partially filled or invalid coordinates are errors.
+The JSON object keys identify locations; `identifier` is retained as metadata.
+
+The seven previously blank letters B, C, D, F, K, M, and N now have estimated
+coordinates. Each is marked with `source: "calculated"` and a `comment` field
+because JSON does not support ordinary comments. All measured values are retained.
+Verify the estimates on the board, especially M and N, before relying on them.
+
+Add an optional `Start` entry under `buttons` to move there after homing.
+Without it, initialization finishes at the homed position.
+
+Whitespace in submitted text is treated as a word boundary. The controller pauses
+for `gcode.word_pause_seconds` (0 seconds by default) between words. Empty text does not move the machine.
+
+For consecutive identical letters within a word, the magnet moves off the letter
+and back before continuing. `gcode.repeat_gesture.distance_mm` defaults to 20 mm;
+set it to 0 to disable the gesture. The `up` letters A-N use positive Y and the
+`down` letters O-Z use negative Y. Both moves use the existing `move_template`.
+The full sequence, including excursions, is checked against the configured bounds
+before motion begins. An invalid excursion rejects the job instead of shortening
+the gesture. Identical letters across word boundaries get only the word pause.
+Digits currently have no repeat gesture, but can be added to an `up` or `down` set.
+
+The Yes, No, and Goodbye buttons queue a single move to the corresponding named
+position. These commands wait their turn after earlier submissions and stay at
+the selected position. Text entry still spells words, including "yes" and "no".
+
+## Raspberry Pi Service
+
+The service runs as `spirit` from `/home/spirit/repos/ouija`, using Waitress in a
+single process so only one controller owns the serial connection.
+
+On the Raspberry Pi, prepare the checkout and install the service:
+
+```bash
+cd /home/spirit/repos/ouija
+git fetch origin
+git switch ouija-cnc
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+sudo install -m 644 systemd/ouijacnc.default /etc/default/ouijacnc
+sudo install -m 644 systemd/ouijacnc.service /etc/systemd/system/ouijacnc.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now ouijacnc.service
+```
+
+The supplied environment file starts in dry-run mode. Open
+`http://ouija.lan:8080` to check the website. To enable real motion, set
+`OUIJACNC_DRY_RUN=0` in `/etc/default/ouijacnc`, then run
+`sudo systemctl restart ouijacnc`. This opens the serial port and homes the
+machine. Subsequent boots and process restarts also home it. The web Restart
+button queues another initialization after any queued work; it is not a stop.
+
+View service status and logs with:
+
+```bash
+systemctl status ouijacnc --no-pager
+journalctl -u ouijacnc -n 50 --no-pager
+```
+
+For later updates, stop the service while updating the checkout and dependencies:
+
+```bash
+sudo systemctl stop ouijacnc
+git pull --ff-only
+.venv/bin/pip install -r requirements.txt
+sudo systemctl start ouijacnc
+```
+
+Don't reinstall the supplied environment file during ordinary updates: it would
+reset the selected dry-run setting. The service starts at boot without a GitHub
+connection; pulling updates is a separate step.
+
+The service user needs serial access:
+
+```bash
+sudo usermod -aG dialout spirit
+```
+
+Log out and back in after changing groups.
+
+## SSH Setup For Testing
+
+From your development machine:
+
+```bash
+ssh spirit@ouija.lan
+```
+
+If SSH is not enabled on the Raspberry Pi:
+
+```bash
+sudo raspi-config
+```
+
+Then choose `Interface Options` -> `SSH` -> enable.

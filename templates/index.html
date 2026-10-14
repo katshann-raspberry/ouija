@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OuijaCNC</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <main>
+      <section class="panel">
+        <header>
+          <h1>OuijaCNC</h1>
+          <div id="state" class="state">Connecting</div>
+        </header>
+
+        {% if error %}
+          <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form method="post" action="/submit">
+          <textarea name="text" rows="5" autofocus placeholder="Enter text">{{ text or "" }}</textarea>
+          <div class="actions">
+            <button type="submit">Send</button>
+            <button type="submit" formaction="/restart" class="secondary">Restart</button>
+          </div>
+        </form>
+
+        <form method="post" class="position-actions" aria-label="Board positions">
+          <button type="submit" formaction="{{ url_for('position', name='yes') }}">Yes</button>
+          <button type="submit" formaction="{{ url_for('position', name='no') }}">No</button>
+          <button type="submit" formaction="{{ url_for('position', name='goodbye') }}">Goodbye</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Controller</h2>
+        <dl>
+          <div>
+            <dt>Connection</dt>
+            <dd id="connected">Unknown</dd>
+          </div>
+          <div>
+            <dt>Machine</dt>
+            <dd id="machine">Unknown</dd>
+          </div>
+          <div>
+            <dt>Queue</dt>
+            <dd id="queue">0</dd>
+          </div>
+          <div>
+            <dt>Active</dt>
+            <dd id="active">None</dd>
+          </div>
+        </dl>
+        <p id="last-error" class="error" hidden></p>
+        <pre id="log"></pre>
+      </section>
+    </main>
+
+    <script>
+      async function refreshStatus() {
+        const response = await fetch("/api/status");
+        const status = await response.json();
+        document.getElementById("connected").textContent = status.connected ? "Connected" : "Disconnected";
+        document.getElementById("machine").textContent = status.machine_state;
+        document.getElementById("queue").textContent = status.queue_depth;
+        document.getElementById("active").textContent = status.active_job || "None";
+        document.getElementById("state").textContent = status.busy ? "Running" : status.machine_state;
+        const error = document.getElementById("last-error");
+        error.hidden = !status.last_error;
+        error.textContent = status.last_error || "";
+        document.getElementById("log").textContent = status.log.slice(-80).join("\n");
+      }
+
+      refreshStatus();
+      setInterval(refreshStatus, 1000);
+    </script>
+  </body>
+</html>

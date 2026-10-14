@@ -1,0 +1,18 @@
+[Unit]
+Description=OuijaCNC FluidNC web controller
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=spirit
+Group=spirit
+WorkingDirectory=/home/spirit/repos/ouija
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-/etc/default/ouijacnc
+ExecStart=/home/spirit/repos/ouija/.venv/bin/waitress-serve --host=0.0.0.0 --port=8080 ouijacnc.web:app
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

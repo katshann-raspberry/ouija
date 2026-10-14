@@ -57,18 +57,18 @@
         },
         "B": {
             "identifier": "B",
-            "x": "",
-            "y": ""
+            "x": "28",
+            "y": "143"
         },
         "C": {
             "identifier": "C",
-            "x": "",
-            "y": ""
+            "x": "52",
+            "y": "149"
         },
         "D": {
             "identifier": "D",
-            "x": "",
-            "y": ""
+            "x": "74",
+            "y": "154"
         },
         "E": {
             "identifier": "E",
@@ -77,8 +77,8 @@
         },
         "F": {
             "identifier": "F",
-            "x": "",
-            "y": ""
+            "x": "118",
+            "y": "161"
         },
         "G": {
             "identifier": "G",
@@ -87,8 +87,8 @@
         },
         "H": {
             "identifier": "H",
-            "x": "165",
-            "y": "165"
+            "x": "162",
+            "y": "168"
         },
         "I": {
             "identifier": "I",
@@ -102,8 +102,10 @@
         },
         "K": {
             "identifier": "K",
-            "x": "",
-            "y": ""
+            "x": "228.8",
+            "y": "159.6",
+            "source": "calculated",
+            "comment": "Not measured: upper-row spacing fit and quadratic arc fit."
         },
         "L": {
             "identifier": "L",
@@ -112,13 +114,17 @@
         },
         "M": {
             "identifier": "M",
-            "x": "",
-            "y": ""
+            "x": "273.0",
+            "y": "151.3",
+            "source": "calculated",
+            "comment": "Not measured: upper-row fit extrapolated beyond measured L; verify on board."
         },
         "N": {
             "identifier": "N",
-            "x": "",
-            "y": ""
+            "x": "295.0",
+            "y": "145.6",
+            "source": "calculated",
+            "comment": "Not measured: upper-row fit extrapolated beyond measured L; verify on board."
         },
         "O": {
             "identifier": "O",

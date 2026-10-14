@@ -1,0 +1,3 @@
+# Dry-run verifies the website and startup without opening the serial port.
+# Change to 0 and restart the service to connect and home the machine.
+OUIJACNC_DRY_RUN=1

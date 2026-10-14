@@ -3,14 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>OuijaCNC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amarante&display=swap" rel="stylesheet">
+    <title>Talk to the spirits</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
     <main>
       <section class="panel">
         <header>
-          <h1>OuijaCNC</h1>
+          <h1>Commune with the spirits</h1>
           <div id="state" class="state">Connecting</div>
         </header>
 
@@ -33,7 +36,7 @@
         </form>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="controller">
         <h2>Controller</h2>
         <dl>
           <div>

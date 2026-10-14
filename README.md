@@ -70,7 +70,6 @@ On the Raspberry Pi, prepare the checkout and install the service:
 ```bash
 cd /home/spirit/repos/ouija
 git fetch origin
-git switch ouija-cnc
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 sudo install -m 644 systemd/ouijacnc.default /etc/default/ouijacnc

@@ -1,8 +1,16 @@
+.amarante-regular {
+  font-family: "Amarante", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 :root {
   color-scheme: light dark;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f5f1e8;
-  color: #1d2522;
+  font-family: "Amarante", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background: #583b3d;
+  color: #f0d2d0;
 }
 
 * {
@@ -21,8 +29,8 @@ main {
 }
 
 .panel {
-  background: #fffaf0;
-  border: 1px solid #d8cdb8;
+  background: #2f2626;
+  border: 5px solid #85713f;
   border-radius: 8px;
   padding: 20px;
 }
@@ -77,7 +85,7 @@ button {
   padding: 0 16px;
   border: 0;
   border-radius: 6px;
-  background: #146c5b;
+  background: #852b83;
   color: white;
   font: inherit;
   font-weight: 700;
@@ -85,7 +93,7 @@ button {
 }
 
 button.secondary {
-  background: #5b605d;
+  background: #f399d7;
 }
 
 .position-actions {

@@ -6,10 +6,10 @@ from ouijacnc.config import Coordinate, _coordinates, load_config
 class MappingTests(unittest.TestCase):
     def test_real_mapping(self):
         config = load_config()
-        self.assertEqual(len(config.characters), 29)
+        self.assertEqual(len(config.characters), 36)
         self.assertEqual(config.characters["A"], Coordinate(5, 135))
         self.assertEqual(config.positions["goodbye"], Coordinate(140, 0))
-        self.assertNotIn("B", config.characters)
+        self.assertEqual(config.characters["B"], Coordinate(30.2, 143.7))
         self.assertNotIn("start", config.positions)
 
     def test_numeric_and_string_coordinates(self):

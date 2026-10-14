@@ -57,18 +57,24 @@
         },
         "B": {
             "identifier": "B",
-            "x": "",
-            "y": ""
+            "x": "30.2",
+            "y": "143.7",
+            "source": "calculated",
+            "comment": "Not measured: upper-row spacing fit and quadratic arc fit."
         },
         "C": {
             "identifier": "C",
-            "x": "",
-            "y": ""
+            "x": "52.3",
+            "y": "149.8",
+            "source": "calculated",
+            "comment": "Not measured: upper-row spacing fit and quadratic arc fit."
         },
         "D": {
             "identifier": "D",
-            "x": "",
-            "y": ""
+            "x": "74.3",
+            "y": "154.7",
+            "source": "calculated",
+            "comment": "Not measured: upper-row spacing fit and quadratic arc fit."
         },
         "E": {
             "identifier": "E",
@@ -77,8 +83,10 @@
         },
         "F": {
             "identifier": "F",
-            "x": "",
-            "y": ""
+            "x": "118.5",
+            "y": "161.5",
+            "source": "calculated",
+            "comment": "Not measured: upper-row spacing fit and quadratic arc fit."
         },
         "G": {
             "identifier": "G",
@@ -102,8 +110,10 @@
         },
         "K": {
             "identifier": "K",
-            "x": "",
-            "y": ""
+            "x": "228.8",
+            "y": "159.6",
+            "source": "calculated",
+            "comment": "Not measured: upper-row spacing fit and quadratic arc fit."
         },
         "L": {
             "identifier": "L",
@@ -112,13 +122,17 @@
         },
         "M": {
             "identifier": "M",
-            "x": "",
-            "y": ""
+            "x": "273.0",
+            "y": "151.3",
+            "source": "calculated",
+            "comment": "Not measured: upper-row fit extrapolated beyond measured L; verify on board."
         },
         "N": {
             "identifier": "N",
-            "x": "",
-            "y": ""
+            "x": "295.0",
+            "y": "145.6",
+            "source": "calculated",
+            "comment": "Not measured: upper-row fit extrapolated beyond measured L; verify on board."
         },
         "O": {
             "identifier": "O",

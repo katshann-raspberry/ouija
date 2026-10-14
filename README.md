@@ -36,12 +36,33 @@ numeric strings or numbers. Entries with both coordinates empty are unmeasured
 and unavailable for submission. Partially filled or invalid coordinates are errors.
 The JSON object keys identify locations; `identifier` is retained as metadata.
 
-The supplied mapping includes seven unmeasured letters: B, C, D, F, K, M, and N.
+The seven previously blank letters B, C, D, F, K, M, and N now have estimated
+coordinates. Each is marked with `source: "calculated"` and a `comment` field
+because JSON does not support ordinary comments. All measured values are retained.
+Verify the estimates on the board, especially M and N, before relying on them.
+
+The estimates assume A-N form the upper arc and O-Z form the lower arc. Using
+the measured upper-row letters A, E, G, H, I, J, and L, a least-squares spacing
+fit gives `x = 8.134191 + 22.068015 * i`, where A has index 0. A quadratic fit
+gives `y = -0.0011001811 * x*x + 0.36492167 * x + 133.694664`. Coordinates are
+rounded to 0.1 mm. M and N extrapolate beyond the measured part of the arc.
+This is an approximate curve, not a measured board calibration.
+
 Add an optional `Start` entry under `buttons` to move there after homing.
 Without it, initialization finishes at the homed position.
 
-Whitespace in submitted text is treated as a word boundary. The controller moves
-to the configured `goodbye` position after each word.
+Whitespace in submitted text is treated as a word boundary. The controller pauses
+for `gcode.word_pause_seconds` (1.5 seconds) between words, then moves to `goodbye`
+once at the end of the message. Empty text does not move the machine.
+
+For consecutive identical letters within a word, the magnet moves off the letter
+and back before continuing. `gcode.repeat_gesture.distance_mm` defaults to 20 mm;
+set it to 0 to disable the gesture. The `up` letters A-N use positive Y and the
+`down` letters O-Z use negative Y. Both moves use the existing `move_template`.
+The full sequence, including excursions, is checked against the configured bounds
+before motion begins. An invalid excursion rejects the job instead of shortening
+the gesture. Identical letters across word boundaries get only the word pause.
+Digits currently have no repeat gesture, but can be added to an `up` or `down` set.
 
 The Yes, No, and Goodbye buttons queue a single move to the corresponding named
 position. These commands wait their turn after earlier submissions and stay at

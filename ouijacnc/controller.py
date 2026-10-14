@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import math
 import queue
 import re
 import threading
@@ -193,15 +194,50 @@ class Controller:
         if not words:
             return
 
-        for word in words:
-            for char in word:
-                coord = self.config.characters.get(char)
-                if coord is None:
-                    continue
+        word_moves = [
+            [(char, self.config.characters[char]) for char in word if char in self.config.characters]
+            for word in words
+        ]
+        # Check the full message, including excursions, before any motion is sent.
+        for moves in word_moves:
+            previous = None
+            for char, coord in moves:
+                self._validate_bounds(coord, char)
+                if char == previous:
+                    excursion = self._repeat_excursion(char, coord)
+                    if excursion is not None:
+                        self._validate_bounds(excursion, f"{char} repeat excursion")
+                previous = char
+        goodbye = self.config.positions.get("goodbye")
+        if goodbye is not None:
+            self._validate_bounds(goodbye, "goodbye")
+
+        for index, moves in enumerate(word_moves):
+            previous = None
+            for char, coord in moves:
+                if char == previous:
+                    excursion = self._repeat_excursion(char, coord)
+                    if excursion is not None:
+                        self._move(excursion, label=f"{char} repeat excursion")
                 self._move(coord, label=char)
                 self._dwell(self.config.settings["gcode"].get("char_dwell_seconds", 0.0))
-            self._move_named_position("goodbye")
-            self._dwell(self.config.settings["gcode"].get("word_pause_seconds", 0.0))
+                previous = char
+            if index < len(word_moves) - 1:
+                self._dwell(self.config.settings["gcode"].get("word_pause_seconds", 0.0))
+        self._move_named_position("goodbye")
+
+    def _repeat_excursion(self, char: str, coord: Coordinate) -> Coordinate | None:
+        gesture = self.config.settings["gcode"].get("repeat_gesture", {})
+        distance = float(gesture.get("distance_mm", 0.0))
+        if not math.isfinite(distance) or distance < 0:
+            raise ValueError("Repeat gesture distance must be finite and non-negative")
+        if distance == 0:
+            return None
+        if char in gesture.get("up", ""):
+            return Coordinate(coord.x, coord.y + distance)
+        if char in gesture.get("down", ""):
+            return Coordinate(coord.x, coord.y - distance)
+        return None
 
     def _run_position(self, name: str) -> None:
         self.config = load_config()

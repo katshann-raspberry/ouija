@@ -18,7 +18,12 @@
     ],
     "move_template": "G0 X{x:.3f} Y{y:.3f}",
     "char_dwell_seconds": 0.0,
-    "word_pause_seconds": 0.0
+    "word_pause_seconds": 1.5,
+    "repeat_gesture": {
+      "distance_mm": 20.0,
+      "up": "ABCDEFGHIJKLMN",
+      "down": "OPQRSTUVWXYZ"
+    }
   },
   "safety": {
     "require_known_characters": true,

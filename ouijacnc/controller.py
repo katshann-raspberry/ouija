@@ -221,7 +221,6 @@ class Controller:
                 previous = char
             if index < len(word_moves) - 1:
                 self._dwell(self.config.settings["gcode"].get("word_pause_seconds", 0.0))
-        self._move_named_position("goodbye")
 
     def _repeat_excursion(self, char: str, coord: Coordinate) -> Coordinate | None:
         gesture = self.config.settings["gcode"].get("repeat_gesture", {})

@@ -208,9 +208,6 @@ class Controller:
                     if excursion is not None:
                         self._validate_bounds(excursion, f"{char} repeat excursion")
                 previous = char
-        goodbye = self.config.positions.get("goodbye")
-        if goodbye is not None:
-            self._validate_bounds(goodbye, "goodbye")
 
         for index, moves in enumerate(word_moves):
             previous = None

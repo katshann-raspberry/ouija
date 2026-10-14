@@ -14,7 +14,7 @@ pip install -r requirements.txt
 flask --app ouijacnc.web run --host 0.0.0.0 --port 8080
 ```
 
-The app uses the Pi's stable CP2102 USB serial device path at `115200`.
+The app uses the Raspberry Pi's stable CP2102 USB serial device path at `115200`.
 
 For development without the controller attached:
 
@@ -41,19 +41,11 @@ coordinates. Each is marked with `source: "calculated"` and a `comment` field
 because JSON does not support ordinary comments. All measured values are retained.
 Verify the estimates on the board, especially M and N, before relying on them.
 
-The estimates assume A-N form the upper arc and O-Z form the lower arc. Using
-the measured upper-row letters A, E, G, H, I, J, and L, a least-squares spacing
-fit gives `x = 8.134191 + 22.068015 * i`, where A has index 0. A quadratic fit
-gives `y = -0.0011001811 * x*x + 0.36492167 * x + 133.694664`. Coordinates are
-rounded to 0.1 mm. M and N extrapolate beyond the measured part of the arc.
-This is an approximate curve, not a measured board calibration.
-
 Add an optional `Start` entry under `buttons` to move there after homing.
 Without it, initialization finishes at the homed position.
 
 Whitespace in submitted text is treated as a word boundary. The controller pauses
-for `gcode.word_pause_seconds` (1.5 seconds) between words, then moves to `goodbye`
-once at the end of the message. Empty text does not move the machine.
+for `gcode.word_pause_seconds` (0 seconds by default) between words. Empty text does not move the machine.
 
 For consecutive identical letters within a word, the magnet moves off the letter
 and back before continuing. `gcode.repeat_gesture.distance_mm` defaults to 20 mm;
@@ -73,7 +65,7 @@ the selected position. Text entry still spells words, including "yes" and "no".
 The service runs as `spirit` from `/home/spirit/repos/ouija`, using Waitress in a
 single process so only one controller owns the serial connection.
 
-On the Pi, prepare the checkout and install the service:
+On the Raspberry Pi, prepare the checkout and install the service:
 
 ```bash
 cd /home/spirit/repos/ouija
@@ -110,7 +102,7 @@ git pull --ff-only
 sudo systemctl start ouijacnc
 ```
 
-Do not reinstall the supplied environment file during ordinary updates: it would
+Don't reinstall the supplied environment file during ordinary updates: it would
 reset the selected dry-run setting. The service starts at boot without a GitHub
 connection; pulling updates is a separate step.
 
@@ -130,26 +122,10 @@ From your development machine:
 ssh spirit@ouija.lan
 ```
 
-If SSH is not enabled on the Pi:
+If SSH is not enabled on the Raspberry Pi:
 
 ```bash
 sudo raspi-config
 ```
 
 Then choose `Interface Options` -> `SSH` -> enable.
-
-If you want me to run commands on the Pi from this workspace, the easiest path is
-to make sure `ssh spirit@ouija.lan` works without an interactive password prompt from
-this machine, usually by adding your public key:
-
-```bash
-ssh-copy-id spirit@ouija.lan
-```
-
-After that, I can use `ssh spirit@ouija.lan ...` from this workspace.
-
-## Legacy CNCjs Interface
-
-The original `test.html` interface and images are retained. That interface requires
-CNCjs running on port 8000; the Flask app connects directly to FluidNC instead.
-Do not run both senders against the serial device at the same time.

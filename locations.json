@@ -57,24 +57,18 @@
         },
         "B": {
             "identifier": "B",
-            "x": "30.2",
-            "y": "143.7",
-            "source": "calculated",
-            "comment": "Not measured: upper-row spacing fit and quadratic arc fit."
+            "x": "28",
+            "y": "143"
         },
         "C": {
             "identifier": "C",
-            "x": "52.3",
-            "y": "149.8",
-            "source": "calculated",
-            "comment": "Not measured: upper-row spacing fit and quadratic arc fit."
+            "x": "52",
+            "y": "149"
         },
         "D": {
             "identifier": "D",
-            "x": "74.3",
-            "y": "154.7",
-            "source": "calculated",
-            "comment": "Not measured: upper-row spacing fit and quadratic arc fit."
+            "x": "74",
+            "y": "154"
         },
         "E": {
             "identifier": "E",
@@ -83,10 +77,8 @@
         },
         "F": {
             "identifier": "F",
-            "x": "118.5",
-            "y": "161.5",
-            "source": "calculated",
-            "comment": "Not measured: upper-row spacing fit and quadratic arc fit."
+            "x": "118",
+            "y": "161"
         },
         "G": {
             "identifier": "G",
@@ -95,8 +87,8 @@
         },
         "H": {
             "identifier": "H",
-            "x": "165",
-            "y": "165"
+            "x": "162",
+            "y": "168"
         },
         "I": {
             "identifier": "I",

@@ -10,7 +10,7 @@
   font-weight: 400;
   font-style: normal;
   background: #583b3d;
-  color: #fff2f0;
+  color: #fff6f2;
 }
 
 * {
@@ -23,7 +23,7 @@ body {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 5fr;
   gap: 2rem;
 }
 
@@ -39,6 +39,7 @@ main {
   border: 5px solid #85713f;
   border-radius: 8px;
   padding: 20px;
+  margin-bottom: 16px;
 }
 
 form {
@@ -153,20 +154,8 @@ pre {
 }
 
 summary {
-  list-style: none;            /* hide default triangle */
-}
-summary::-webkit-details-marker {
-  display: none;               /* Safari */
-}
-summary::before {
-  content: "▸ ";
-}
-details[open] summary::before {
-  content: "▾ ";
-}
-
-details{
-  margin-top: 10px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 @media (max-width: 700px) {

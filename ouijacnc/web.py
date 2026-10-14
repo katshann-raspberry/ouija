@@ -40,6 +40,14 @@ def create_app() -> Flask:
         controller.restart()
         return redirect(url_for("index"))
 
+    @app.post("/position/<name>")
+    def position(name: str):
+        try:
+            controller.submit_position(name)
+        except ValueError as exc:
+            return render_template("index.html", error=str(exc)), 400
+        return redirect(url_for("index"))
+
     return app
 
 

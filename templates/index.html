@@ -25,6 +25,12 @@
             <button type="submit" formaction="/restart" class="secondary">Restart</button>
           </div>
         </form>
+
+        <form method="post" class="position-actions" aria-label="Board positions">
+          <button type="submit" formaction="{{ url_for('position', name='yes') }}">Yes</button>
+          <button type="submit" formaction="{{ url_for('position', name='no') }}">No</button>
+          <button type="submit" formaction="{{ url_for('position', name='goodbye') }}">Goodbye</button>
+        </form>
       </section>
 
       <section class="panel">

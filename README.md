@@ -43,6 +43,10 @@ Without it, initialization finishes at the homed position.
 Whitespace in submitted text is treated as a word boundary. The controller moves
 to the configured `goodbye` position after each word.
 
+The Yes, No, and Goodbye buttons queue a single move to the corresponding named
+position. These commands wait their turn after earlier submissions and stay at
+the selected position. Text entry still spells words, including "yes" and "no".
+
 ## Raspberry Pi Service
 
 The service runs as `spirit` from `/home/spirit/repos/ouija`, using Waitress in a

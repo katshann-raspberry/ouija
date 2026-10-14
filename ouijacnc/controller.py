@@ -20,13 +20,15 @@ except ImportError:  # pragma: no cover - startup will report a useful error.
 STATUS_RE = re.compile(r"^<([^|>]+)")
 
 
-JobKind = Literal["text", "restart"]
+JobKind = Literal["text", "restart", "position"]
+POSITION_COMMANDS = ("yes", "no", "goodbye")
 
 
 @dataclass
 class QueuedJob:
     kind: JobKind
     text: str = ""
+    position: str = ""
 
 
 @dataclass
@@ -67,6 +69,15 @@ class Controller:
 
     def restart(self) -> None:
         self.jobs.put(QueuedJob(kind="restart"))
+
+    def submit_position(self, name: str) -> None:
+        name = name.lower()
+        self._validate_position(name)
+        self.jobs.put(QueuedJob(kind="position", position=name))
+
+    def _validate_position(self, name: str) -> None:
+        if name not in POSITION_COMMANDS or name not in self.config.positions:
+            raise ValueError(f"Position '{name}' is not available")
 
     def snapshot(self) -> ControllerSnapshot:
         with self.lock:
@@ -109,12 +120,17 @@ class Controller:
             try:
                 with self.lock:
                     self.busy = True
-                    self.active_job = "restart" if job.kind == "restart" else job.text
+                    self.active_job = (
+                        "restart" if job.kind == "restart" else
+                        job.position.title() if job.kind == "position" else job.text
+                    )
                     self.last_error = None
 
                 self._ensure_connected()
                 if job.kind == "restart":
                     self._initialize()
+                elif job.kind == "position":
+                    self._run_position(job.position)
                 else:
                     self._run_text(job.text)
             except Exception as exc:
@@ -186,6 +202,11 @@ class Controller:
                 self._dwell(self.config.settings["gcode"].get("char_dwell_seconds", 0.0))
             self._move_named_position("goodbye")
             self._dwell(self.config.settings["gcode"].get("word_pause_seconds", 0.0))
+
+    def _run_position(self, name: str) -> None:
+        self.config = load_config()
+        self._validate_position(name)
+        self._move_named_position(name)
 
     def _move_named_position(self, name: str) -> None:
         coord = self.config.positions.get(name)
